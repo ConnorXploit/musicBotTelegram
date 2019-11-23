@@ -80,7 +80,12 @@ def welele(message):
 		resultados = resultados[0:max_resultados] 
 
 		for res in resultados:
-			bot.reply_to(message, res)
+			if res.split('.')[-1] in ('jpg', 'png'):
+				img = BytesIO(urllib.request.urlopen(res).read())
+				bot.send_chat_action(message.chat.id, 'upload_photo')
+				bot.send_photo(message.chat.id, img, reply_to_message_id=message.message_id)
+			else:
+				bot.reply_to(message, res)
 	else:
 		bot.reply_to(message, 'Debes decirme algo para que busque')
 

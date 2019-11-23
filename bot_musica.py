@@ -78,7 +78,7 @@ while True:
 				except:
 					max_resultados = 10
 
-				publicar = True if 'PUBLICAR' in buscar else False
+				publicar = True if 'PUBLICAR' in message.text.split('welele')[1].strip() else False
 
 				resultados = getWeleleContent(busqueda, max_resultados)
 

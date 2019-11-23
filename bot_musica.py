@@ -4,9 +4,24 @@ from bs4 import BeautifulSoup
 
 bot = telebot.TeleBot(os.environ['API_BOT'])
 
-@bot.message_handler(commands=['start', 'help'])
+HELP_MSG = """/start - Inicia el Servidor de musica
+/help - Muestra este mensaje de ayuda
+/musica - Tienes que pasar un nombre de artista o cancion y te dará maxímo 10 links por defecto (Puedes pasar un parametro para ampliar o minimizar la respuesta [4] por ejemplo)
+/welele - Devuelve contenido de welele buscando por tags como puede ser "Humor", "Risa", "Videos", "Gatos", etc. (Puedes pasar un parametro para ampliar o minimizar la respuesta [40] por ejemplo)
+
+Ejemplos:
+
+/welele gatos [11]
+/musica iron maiden [3]
+/musica rap"""
+
+@bot.message_handler(commands=['start'])
 def saludar(message):
 	bot.reply_to(message, 'Hola! Que tal? Que puedo hacer por ti?')
+
+@bot.message_handler(commands=['help'])
+def saludar(message):
+	bot.reply_to(message, HELP_MSG)
 
 def getVideosLink(busqueda):
 	query = urllib.parse.quote(busqueda)

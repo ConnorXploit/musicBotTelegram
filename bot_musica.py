@@ -30,7 +30,7 @@ def getWeleleContent(busqueda):
 	html = response.read()
 	soup = BeautifulSoup(html, 'html.parser')
 
-	images = [ im.find('img')['href'] for im in [art.findAll('img') for art in soup.findAll('article') ] ]
+	images = [ im['src'] for im in soup.findAll('img') ]
 
 	return images
 

@@ -81,10 +81,14 @@ def welele(message):
 		resultados = resultados[0:max_resultados] 
 
 		for res in resultados:
-			if res.split('.')[-1] in ('jpg', 'png'):
+			if res.split('.')[-1] in ('jpg', 'png', 'gif', 'gifv'):
 				img = BytesIO(urllib.request.urlopen(res).read())
 				bot.send_chat_action(message.chat.id, 'upload_photo')
 				bot.send_photo(message.chat.id, img, reply_to_message_id=message.message_id)
+			elif res.split('.')[-1] in ('mp4', 'mpg', 'mpeg', 'avi', 'mkv'):
+				video = BytesIO(urllib.request.urlopen(res).read())
+				bot.send_chat_action(message.chat.id, 'upload_video')
+				bot.send_video(message.chat.id, video, reply_to_message_id=message.message_id)
 			else:
 				bot.reply_to(message, res)
 	else:

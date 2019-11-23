@@ -2,6 +2,7 @@ import telebot, os
 import urllib.request
 from bs4 import BeautifulSoup
 from io import BytesIO
+PUBLICAR_ID = '1115946057'
 while True:
 	try:
 		bot = telebot.TeleBot(os.environ['API_BOT'])
@@ -69,13 +70,15 @@ while True:
 
 		@bot.message_handler(commands=['welele'])
 		def welele(message):
-			buscar = message.text.split('welele')[1].strip()
+			buscar = message.text.split('welele')[1].strip().replace('PUBLICAR', '')
 			if buscar:
 				busqueda = buscar.split('[')[0].strip()
 				try:
 					max_resultados = int(buscar.split('[')[1].strip().split(']')[0])
 				except:
 					max_resultados = 10
+
+				publicar = True if 'PUBLICAR' in buscar else False
 
 				resultados = getWeleleContent(busqueda, max_resultados)
 
@@ -87,12 +90,20 @@ while True:
 							img = BytesIO(urllib.request.urlopen(res).read())
 							bot.send_chat_action(message.chat.id, 'upload_photo')
 							bot.send_photo(message.chat.id, img, reply_to_message_id=message.message_id)
+							if publicar:
+								bot.send_chat_action(PUBLICAR_ID, 'upload_photo')
+								bot.send_photo(PUBLICAR_ID, img)
 						elif res.split('.')[-1] in ('mp4', 'mpg', 'mpeg', 'avi', 'mkv'):
 							video = BytesIO(urllib.request.urlopen(res).read())
 							bot.send_chat_action(message.chat.id, 'upload_video')
 							bot.send_video(message.chat.id, video, reply_to_message_id=message.message_id)
+							if publicar:
+								bot.send_chat_action(PUBLICAR_ID, 'upload_video')
+								bot.send_video(PUBLICAR_ID, video)
 						else:
 							bot.reply_to(message, res)
+							if publicar:
+								bot.reply_to(PUBLICAR_ID, res)
 					except:
 						pass
 			else:

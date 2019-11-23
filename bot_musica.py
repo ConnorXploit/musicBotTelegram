@@ -21,7 +21,8 @@ def getVideosLink(busqueda):
 
 	return videos
 
-def getWeleleContent(busqueda):
+def getWeleleContent(busqueda, max_resultados):
+	data = []
 	query = urllib.parse.quote(busqueda)
 
 	url = "https://welele.es/tagged/{q}".format(q=query)
@@ -32,7 +33,22 @@ def getWeleleContent(busqueda):
 
 	images = [ im['src'] for im in soup.find('div', { 'class' : 'posts' }).findAll('img') ]
 
-	return images
+	videos = [ im['src'] for im in soup.find('div', { 'class' : 'posts' }).findAll('source') ]
+	
+	data = images + videos
+	if len(data) < max_resultados:
+		pages = int(max_resultados/len(data))
+		for page in range(2, pages):
+			url = "https://welele.es/tagged/{q}/page/{n}".format(q=query, n=page)
+			response = urllib.request.urlopen(url)
+			html = response.read()
+			soup = BeautifulSoup(html, 'html.parser')
+
+			images = [ im['src'] for im in soup.find('div', { 'class' : 'posts' }).findAll('img') ]
+
+			videos = [ im['src'] for im in soup.find('div', { 'class' : 'posts' }).findAll('source') ]
+			data += images + videos
+	return data
 
 @bot.message_handler(commands=['welele'])
 def welele(message):
@@ -44,7 +60,7 @@ def welele(message):
 		except:
 			max_resultados = 10
 
-		resultados = getWeleleContent(busqueda)
+		resultados = getWeleleContent(busqueda, max_resultados)
 
 		resultados = resultados[0:max_resultados] 
 

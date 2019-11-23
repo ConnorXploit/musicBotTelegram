@@ -85,14 +85,14 @@ def welele(message):
 
 		for res in resultados:
 			try:
-				if res.split('.')[-1] in ('jpg', 'png', 'gif', 'gifv'):
+				if res.split('.')[-1] in ('jpg', 'png'):
 					img = BytesIO(urllib.request.urlopen(res).read())
 					bot.send_chat_action(message.chat.id, 'upload_photo')
 					bot.send_photo(message.chat.id, img, reply_to_message_id=message.message_id)
 					if publicar:
 						bot.send_chat_action(PUBLICAR_ID, 'upload_photo')
 						bot.send_photo(PUBLICAR_ID, img)
-				elif res.split('.')[-1] in ('mp4', 'mpg', 'mpeg', 'avi', 'mkv'):
+				elif res.split('.')[-1] in ('mp4', 'mpg', 'mpeg', 'avi', 'mkv', 'gif', 'gifv'):
 					video = BytesIO(urllib.request.urlopen(res).read())
 					bot.send_chat_action(message.chat.id, 'upload_video')
 					bot.send_video(message.chat.id, video, reply_to_message_id=message.message_id)

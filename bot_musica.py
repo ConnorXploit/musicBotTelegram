@@ -1,8 +1,8 @@
-import telebot
+import telebot, os
 import urllib.request
 from bs4 import BeautifulSoup
 
-bot = telebot.TeleBot('1018267077:AAGMs7Rr2ZvfAF1YXTPBvhCoQYrajXKjPQ8')
+bot = telebot.TeleBot(os.environ('API_BOT'))
 
 @bot.message_handler(commands=['start', 'help'])
 def saludar(message):
@@ -30,7 +30,7 @@ def getWeleleContent(busqueda):
 	html = response.read()
 	soup = BeautifulSoup(html, 'html.parser')
 
-	images = [ art.find('img')['href'] for art in soup.findAll('article') ]
+	images = [ im['href'] for im in [art.findAll('img') for art in soup.findAll('article') ] ]
 
 	return images
 

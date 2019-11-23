@@ -1,6 +1,7 @@
 import telebot, os
 import urllib.request
 from bs4 import BeautifulSoup
+from io import BytesIO
 
 bot = telebot.TeleBot(os.environ['API_BOT'])
 

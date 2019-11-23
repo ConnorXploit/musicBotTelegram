@@ -21,6 +21,38 @@ def getVideosLink(busqueda):
 
 	return videos
 
+def getWeleleContent(busqueda):
+	query = urllib.parse.quote(busqueda)
+
+	url = "https://welele.es/tagged/{q}".format(q=query)
+
+	response = urllib.request.urlopen(url)
+	html = response.read()
+	soup = BeautifulSoup(html, 'html.parser')
+
+	images = [ art.find('img')['href'] for art in soup.findAll('article') ]
+
+	return images
+
+@bot.message_handler(commands=['welele'])
+def welele(message):
+	buscar = message.text.split('welele')[1].strip()
+	if buscar:
+		busqueda = buscar.split('[')[0].strip()
+		try:
+			max_resultados = int(buscar.split('[')[1].strip().split(']')[0])
+		except:
+			max_resultados = 10
+
+		resultados = getWeleleContent(busqueda)
+
+		resultados = resultados[0:max_resultados] 
+
+		for res in resultados:
+			bot.reply_to(message, res)
+	else:
+		bot.reply_to(message, 'Debes decirme algo para que busque')
+
 @bot.message_handler(commands=['musica'])
 def musica(message):
 	buscar = message.text.split('musica')[1].strip()

@@ -2,7 +2,7 @@ import telebot, os
 import urllib.request
 from bs4 import BeautifulSoup
 
-bot = telebot.TeleBot(os.environ('API_BOT'))
+bot = telebot.TeleBot(os.environ['API_BOT'])
 
 @bot.message_handler(commands=['start', 'help'])
 def saludar(message):
